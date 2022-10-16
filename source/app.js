@@ -12,8 +12,7 @@ app.use("/api", ([
     require("./routes/users/usuarios"),
     require("./routes/users/roles"),
     require("./routes/users/usuarios_roles"),
-    require("./routes/users/login"),
-    
+    require("./routes/users/login"),    
     //data
     require("./routes/users/usersData/data")
 ]));

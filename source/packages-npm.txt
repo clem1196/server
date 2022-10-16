@@ -1,0 +1,7 @@
+1- express: Framework para NodeJs para la creación de aplicaciones web y apis.
+2- jsonwebtoken: (JSON Web Token), para crear tokens de acceso con identidad y privilegios. 
+3- mysql: controlador de node.js para conectar nuestra aplicación con la base de datos MySql.
+4- cors: (Cross-Origin Resource Sharing), mecanismo que permite solicitar recursos restringidos.
+5- body-parser: extrae y analiza el cuerpo de una petición y la expone en el req.body
+6- bcryptjs: para cifrar los passwords.
+7- nodemon: utilidad que monitorea los cambios en nuestro codigo y reinicia automaticamente el servidor.

@@ -26,6 +26,8 @@ const querys=async (req, res) => {
             users_ByUserName : await pool.query('call get_users_ByUserName(?)', [nombre_rol]),
             //lista de usuarios por nombre_usuario pero diferente id
             users_ByUserName_but_differentId : await pool.query('call get_users_ByUserName_but_differentId(?, ?)', [nombre_usuario, id]),
+            //lista de usuarios activos
+            usersid_and_usersnames: await pool.query('call get_usersid_and_usersnames()'),
             //lista de usuarios
             users: await pool.query('call get_users()'),
             //USUARIOS_ROLES
@@ -58,6 +60,7 @@ const querys=async (req, res) => {
             users_ById: lists.users_ById[0],
             users_ByUserName : lists.users_ByUserName[0],
             users_ByUserName_but_differentId : lists.users_ByUserName_but_differentId[0],
+            usersid_and_usersnames: lists.usersid_and_usersnames[0],
             users: lists.users[0],
             //usuarios_roles            
             users_roles_ById: lists.users_roles_ById[0],            

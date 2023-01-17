@@ -17,6 +17,7 @@ app.use("/api", ([
     require("./routes/users/login"),
     //documentos
     require('./routes/doc/documentos'),
+    require('./routes/doc/types'),
     require('./routes/doc/personas'),
     require('./routes/doc/doc_person'),
     require('./routes/doc/file'),    

@@ -2,7 +2,7 @@ const pool = require("../../base_datos");
 
 //Registro de documentos
 const crearDoc = async (req, res) => {
-  const { doc_type, doc_number, file } = req.body;
+  const { doc_number, typeid, file } = req.body;
   const token = req.headers.authorization;
   const userId = JSON.parse(atob(token.split(".")[1])).userId;
   try {
@@ -17,9 +17,9 @@ const crearDoc = async (req, res) => {
     await pool.query(
       "call insert_documents(?, ?, ?, ?, ?, ?)",
       [
-        userId,
-        doc_type,
+        userId,        
         doc_number,
+        typeid,
         file,
         /*created*/ new Date(Date.now()),
         /*state*/ 0,
@@ -70,7 +70,7 @@ const editDoc = async (req, res) => {
   const result = await pool.query("call get_documents_ById(?)", [id]);
   try {
     if (result[0].length > 0) {
-      const { userid, doc_type, doc_number, file, state } = req.body;
+      const { userid, doc_number, typeid,  file, state } = req.body;
       //si la longitud del resultado es mayor que cero verificamos que el numero de documento no se se repita
       const result1 = await pool.query(
         "call get_documents_ByDocNum_but_differentId(?,?)",
@@ -81,9 +81,9 @@ const editDoc = async (req, res) => {
           .status(409)
           .send({ Message: "The document number already exists" });
       if (
-        userid == result[0][0].userid &&
-        doc_type == result[0][0].doc_type &&
+        userid == result[0][0].userid &&        
         doc_number == result[0][0].doc_number &&
+        typeid == result[0][0].typeid &&
         file == result[0][0].file &&
         state == result[0][0].state
       )
@@ -93,8 +93,8 @@ const editDoc = async (req, res) => {
         [
           id,
           userid,
-          doc_type,
           doc_number,
+          typeid,          
           file,
           /*updated*/ new Date(Date.now()),
           state,

@@ -2,19 +2,19 @@ const pool = require("../../base_datos");
 
 //Registro de personas
 const createPerson = async (req, res) => {
-  const { dni, firstSurname, lastSurname, name } = req.body;
+  const { documentid, firstSurname, lastSurname, name } = req.body;
   try {
-    const duplicateInDni = await pool.query("call get_persons_ByDni(?)", [dni]);
-    console.log(duplicateInDni[0]);
+    const duplicatePersons = await pool.query("call get_persons_ByNames(?,?,?)", [firstSurname, lastSurname, name]);
+    console.log(duplicatePersons[0]);
     console.log(firstSurname, lastSurname, name);
-    if (duplicateInDni[0].length > 0) {
+    if (duplicatePersons[0].length > 0) {
       return res.status(409).send({ Message: "It already exists" });
     }
     // caso contrario insertamos la persona
     await pool.query(
       "call insert_person(?, ?, ?, ?, ?, ?)",
       [
-        dni,
+        documentid,
         firstSurname,
         lastSurname,
         name,
@@ -67,17 +67,17 @@ const editPerson = async (req, res) => {
   const result = await pool.query("call get_persons_ById(?)", [id]);
   try {
     if (result[0].length > 0) {
-      const { dni, firstSurname, lastSurname, name, state } = req.body;
+      const { documentid, firstSurname, lastSurname, name, state } = req.body;
       //si la longitud del resultado es mayor que cero verificamos que el numero de dni no se se repita
       const result1 = await pool.query(
-        "call get_persons_ByDni_but_differentId(?,?)",
-        [id, dni]
+        "call get_persons_ByNames_but_differentId(?,?,?,?)",
+        [id, firstSurname, lastSurname, name]
       );
       if (result1[0].length > 0)
         return res.status(409).send({ Message: "The person already exists" });
       //comparamos los cambios
       if (
-        dni == result[0][0].dni &&
+        documentid == result[0][0].documentid &&
         firstSurname == result[0][0].firstSurname &&
         lastSurname == result[0][0].lastSurname &&
         name == result[0][0].name &&
@@ -88,7 +88,7 @@ const editPerson = async (req, res) => {
         "call update_persons_ById(?, ?, ?, ?, ?, ?, ?)",
         [
           id,
-          dni,
+          documentid,
           firstSurname,
           lastSurname,
           name,

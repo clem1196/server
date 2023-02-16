@@ -41,7 +41,7 @@ const listPerson = async (req, res) => {
       return res.status(200).send({ Personas: result[0] });
     }
     res.status(404).send({ Message: "the list is empty" });
-    console.log(result[0]);
+    //console.log(result[0]);
   } catch (error) {
     console.error(error);
   }
@@ -85,7 +85,7 @@ const editPerson = async (req, res) => {
       )
         return res.status(400).send({ Message: "Modifique algo" });
       await pool.query(
-        "call update_persons_ById(?, ?, ?, ?, ?, ?, ?)",
+        "call update_persons(?, ?, ?, ?, ?, ?, ?)",
         [
           id,
           documentid,

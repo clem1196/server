@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
  
   filename: (req, file, cb) => {
     cb(null, file.originalname);
-    //console.log(file)    
+    console.log(file)    
   }
 });
 let filter = (req, file, cb) => {

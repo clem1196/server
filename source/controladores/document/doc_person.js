@@ -2,7 +2,9 @@ const pool = require("../../base_datos");
 
 //Registro de doc_person
 const addDoc_person = async (req, res) => {
-  const { documentid, personid, attended_by } = req.body;
+  let token = req.headers.authorization;
+  const userid = JSON.parse(atob(token.split(".")[1])).userId;
+  const { documentid, personid } = req.body;
   try {
     const doc = await pool.query("call get_documents_ById(?)", [documentid]);
     const pers = await pool.query("call get_persons_ById(?)", [personid]);
@@ -16,8 +18,8 @@ const addDoc_person = async (req, res) => {
       }
       // caso contrario insertamos una nueva relación document_person
       await pool.query(
-        "call insert_doc_persons(?, ?, ?, ?)",
-        [documentid, personid, /*created*/ new Date(Date.now()), attended_by],
+        "call insert_doc_persons(?, ?, ?, ?, ?)",
+        [userid, documentid, personid, /*created*/ new Date(Date.now()), /*state*/"Pendiente"],
         (error, results) => {
           if (error) throw error;
           return res
@@ -68,8 +70,10 @@ const listOneDoc_person = async (req, res) => {
 
 //editar document_person
 const editDoc_person = async (req, res) => {
+  let token = req.headers.authorization;
+  const userid = JSON.parse(atob(token.split(".")[1])).userId;
   const { id } = req.params;
-  const { documentid, personid, attended_by, state } = req.body;
+  const { documentid, personid, state } = req.body;
   try {
     //obtenemos una relacion mediante su id
     const result = await pool.query("call get_doc_persons_ById(?)", [id]);
@@ -89,10 +93,9 @@ const editDoc_person = async (req, res) => {
             .status(400)
             .send({ Message: "la relacion doc_person ya existe" });
         //si documentid, personid, attended_by de la relacion es igual al del req.body
-        if (
+        if (         
           documentid == result[0][0].documentid &&
-          personid == result[0][0].personid &&
-          attended_by == result[0][0].attended_by&
+          personid == result[0][0].personid &&          
           state == result[0][0].state
         )
           return res.status(400).send({ Message: "debe modificar algo" });
@@ -101,10 +104,10 @@ const editDoc_person = async (req, res) => {
         await pool.query(
           "call update_doc_persons(?,?,?,?,?,?)",
           [
+            userid,
             documentid,
             personid,
-            /*updated*/ new Date(Date.now()),
-            attended_by,
+            /*updated*/ new Date(Date.now()),            
             state,
             id,
           ],

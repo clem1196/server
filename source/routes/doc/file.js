@@ -1,21 +1,25 @@
 const express = require("express");
 const router = express.Router();
-const fileMiddleware = require('../../middlewares/middlewares')
-//const fileMiddlewareUpload = require('../../middlewares/upload')
+const fileMiddleware = require('../../middlewares/middlewares');
 const controladorFile = require("../../controladores/document/file");
 
 //upload multiple files
 router.post('/uploads',
     fileMiddleware.isLoggedIn,
     fileMiddleware.isEmpleado,    
-    controladorFile.uploads,
-    
+    controladorFile.uploads,    
 );
 //Listar files
 router.get('/files',
     fileMiddleware.isLoggedIn,
     fileMiddleware.isEmpAudAdm,   
-    controladorFile.getListFiles
+    controladorFile.getFiles
+);
+//obtener un file
+router.get('/files/:name',
+    fileMiddleware.isLoggedIn,
+    fileMiddleware.isEmpAudAdm,   
+    controladorFile.getOneFile
 );
 //descargar one file
 router.get('/files/download/:name',
@@ -23,7 +27,7 @@ router.get('/files/download/:name',
     fileMiddleware.isEmpAudAdm,
     controladorFile.descargar
 );
-//Eliminar multiples files
+//Eliminar files
 router.delete('/files/:name',
     fileMiddleware.isLoggedIn,
     fileMiddleware.isEmpleado,

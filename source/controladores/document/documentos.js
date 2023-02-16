@@ -15,9 +15,8 @@ const crearDoc = async (req, res) => {
     }
     // caso contrario insertamos un nuevo documento
     await pool.query(
-      "call insert_documents(?, ?, ?, ?, ?, ?)",
-      [
-        userId,        
+      "call insert_documents(?, ?, ?, ?, ?)",
+      [              
         doc_number,
         typeid,
         file,
@@ -89,10 +88,9 @@ const editDoc = async (req, res) => {
       )
         return res.status(400).send({ Message: "Modifique algo" });
       await pool.query(
-        "call update_documents_ById(?, ?, ?, ?, ?, ?, ?)",
+        "call update_documents(?, ?, ?, ?, ?, ?)",
         [
-          id,
-          userid,
+          id,          
           doc_number,
           typeid,          
           file,

@@ -3,6 +3,7 @@ const querys = async (req, res) => {
   try {
     //parametros
     const id = req.params.id;
+    const token = req.headers.authorization;
     const {
       firstSurname,
       lastSurname,
@@ -13,7 +14,19 @@ const querys = async (req, res) => {
       name_type,
       typeid,
     } = req.body;
-
+    //FILES
+    const listFiles = async () => {
+      try {
+        return await axios.get("http://localhost:4000/api/files", {
+          headers: {
+            Authorization: token,
+          },
+        });
+        //console.log(this.files);
+      } catch (error) {       
+        console.log(error);
+      }
+    };
     let lists = {
       //*DOCUMENTS
       //documento por id
@@ -92,7 +105,7 @@ const querys = async (req, res) => {
         "call get_doc_persons_ByDocNumber_and_PersonFullname()"
       ),
       //lista de doc_persons
-      doc_persons: await pool.query("call get_doc_persons()"),
+      doc_persons: await pool.query("call get_doc_persons()"),      
     };
     //este objeto lists lo usaremos en el frontend
     return res.status(200).send({

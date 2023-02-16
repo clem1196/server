@@ -1,4 +1,3 @@
-//const uploadFile = require("../middlewares/upload");
 const uploadFiles = require("../../middlewares/upload");
 const fs = require("fs");
 
@@ -19,8 +18,8 @@ const uploads = async (req, res) => {
     console.log(error);
   }
 };
-
-const getListFiles = (req, res) => {
+//listar files
+const getFiles = (req, res) => {
   const directoryPath =
     "D:\\Doc_registro\\uploads/"; /*__basedir + "/resources/uploads/"*/
   const baseUrl = `http://${req.headers.host}/api/files/download/`;
@@ -30,7 +29,10 @@ const getListFiles = (req, res) => {
       res.status(500).send({ Message: "No hay archivos que mostrar" });
     }
     let fileInfos = [];
+    console.log(files);
+
     files.forEach((file) => {
+      console.log(file);
       fileInfos.push({
         name: file,
         url: baseUrl + file,
@@ -40,15 +42,40 @@ const getListFiles = (req, res) => {
     res.status(200).send(fileInfos);
   });
 };
+//obtener un file
+const getOneFile = (req, res) => {
+  let fileName = req.params.name;
+  const directoryPath =
+    "D:\\Doc_registro\\uploads/"; /*__basedir + "/resources/uploads/"*/
+  const baseUrl = `http://${req.headers.host}/api/files/`;
+
+  fs.readdir(directoryPath, function (err, files) {
+    if (err) {
+      res.status(500).send({ Message: "No hay archivos que mostrar" });
+    }
+    let fileInfos = [];
+    //console.log(files);
+    files.forEach((file) => {
+      if (file == fileName) {
+        fileInfos.push({
+          name: file,
+          url: baseUrl + file,
+        });
+      }
+    });
+    res.status(200).send(fileInfos[0].url);
+  });
+};
+//descargar
 const descargar = (req, res) => {
   let fileName = req.params.name;
   //console.log(fileName)
-  let directoryPath =
-    "D:\\Doc_registro\\uploads/" /*__basedir + "/resources/uploads/"*/ +
-    fileName;
+  let directoryPath = "D:\\Doc_registro\\uploads/" + fileName;
   res.download(directoryPath, fileName, (err) => {
     if (err)
-      res.status(500).send({ Message: "El archivo no existe o fue eliminado" });
+      return res
+        .status(500)
+        .send({ Message: "El archivo no existe o fue eliminado" });
   });
 };
 
@@ -69,7 +96,8 @@ const deleteFile = (req, res) => {
 };
 module.exports = {
   uploads,
-  getListFiles,
+  getFiles,
+  getOneFile,  
   descargar,
-  deleteFile,
+  deleteFile  
 };

@@ -1,4 +1,4 @@
-const uploadFiles = require("../../middlewares/upload");
+const uploadFiles = require("../../middlewares/uploadMultiple");
 const fs = require("fs");
 
 const uploads = async (req, res) => {
@@ -20,26 +20,30 @@ const uploads = async (req, res) => {
 };
 //listar files
 const getFiles = (req, res) => {
-  const directoryPath =
-    "D:\\Doc_registro\\uploads/"; /*__basedir + "/resources/uploads/"*/
+  const directoryPath = "D:\\Doc_registro\\uploads/";
   const baseUrl = `http://${req.headers.host}/api/files/download/`;
-
   fs.readdir(directoryPath, function (err, files) {
-    if (err) {
-      res.status(500).send({ Message: "No hay archivos que mostrar" });
+    if (err) throw err;
+    if (files.length > 0) {
+      let fileInfos = [];
+      console.log(files);
+      for (let index = 0; index < files.length; index++) {
+        const file = files[index];
+        let date = new Date(parseInt(file.split("__")[1])).toLocaleString(
+          "es-PE"
+        );
+        //console.log(date);
+        fileInfos.push({
+          name: file,
+          url: baseUrl + file,
+          created: date,
+        });
+      }
+      //console.log(fileInfos)
+      return res.status(200).send(fileInfos);
+    } else {
+      res.status(404).send({ Message: "No hay archivos que mostrar" });
     }
-    let fileInfos = [];
-    console.log(files);
-
-    files.forEach((file) => {
-      console.log(file);
-      fileInfos.push({
-        name: file,
-        url: baseUrl + file,
-      });
-    });
-
-    res.status(200).send(fileInfos);
   });
 };
 //obtener un file
@@ -47,23 +51,28 @@ const getOneFile = (req, res) => {
   let fileName = req.params.name;
   const directoryPath =
     "D:\\Doc_registro\\uploads/"; /*__basedir + "/resources/uploads/"*/
-  const baseUrl = `http://${req.headers.host}/api/files/`;
+  const baseUrl = `http://${req.headers.host}/api/files/download/`;
 
   fs.readdir(directoryPath, function (err, files) {
-    if (err) {
-      res.status(500).send({ Message: "No hay archivos que mostrar" });
+    if (err) throw err;
+    if (files.length > 0) {
+      let fileInfos = [];
+      //console.log(files);
+      files.forEach((file) => {
+        if (file == fileName) {
+          let date = new Date(parseInt(file.split("__")[1])).toLocaleString(
+            "es-PE"
+          );
+          fileInfos.push({
+            name: file,
+            url: baseUrl + file,
+            created: date,
+          });
+        }
+      });
+      return res.status(200).send(fileInfos);
     }
-    let fileInfos = [];
-    //console.log(files);
-    files.forEach((file) => {
-      if (file == fileName) {
-        fileInfos.push({
-          name: file,
-          url: baseUrl + file,
-        });
-      }
-    });
-    res.status(200).send(fileInfos[0].url);
+    res.status(404).send({ Message: "No hay archivos que mostrar" });
   });
 };
 //descargar
@@ -97,7 +106,7 @@ const deleteFile = (req, res) => {
 module.exports = {
   uploads,
   getFiles,
-  getOneFile,  
+  getOneFile,
   descargar,
-  deleteFile  
+  deleteFile,
 };

@@ -70,17 +70,17 @@ module.exports = {
   },
   validarDoc: (req, res, next) => {
     // número_doc min 6 chars
-    if (!req.body.doc || req.body.doc.length < 3) {
+    if (!req.body.doc_number || req.body.doc_number.length < 6) {
       return res
         .status(400)
         .send({
           Message:
-            "Por favor ingrese el número de documento, minimo 6 caracteres",
+            "Por favor ingrese doc_number, mínimo 6 caracteres",
         });
     }
-    // estado
-    if (!req.body.estado) {
-      return res.status(400).send({ Message: "Por favor ingrese el Estado" });
+    // name
+    if (!req.body.name || req.body.name.length<2) {
+      return res.status(400).send({ Message: "Por favor ingrese name mínimo 2 caracteres" });
     }
     next();
   },

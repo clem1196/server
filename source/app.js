@@ -15,15 +15,12 @@ app.use("/api", ([
     require("./routes/users/roles"),
     require("./routes/users/usuarios_roles"),
     require("./routes/users/login"),
-    //documentos
-    require('./routes/doc/documentos'),
-    require('./routes/doc/types'),
-    require('./routes/doc/personas'),
-    require('./routes/doc/doc_person'),
+    //documentos   
+    require('./routes/doc/documents'),   
     require('./routes/doc/file'),    
     //data
-    require("./routes/users/usersData/data"),
-    require("./routes/doc/docsData/docsData")
+    require("./routes/users/usersData/data")
+    
 ]));
 
 app.listen(PORT, ()=>{

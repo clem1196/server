@@ -20,7 +20,7 @@ const uploads = async (req, res) => {
 };
 //listar files
 const getFiles = (req, res) => {
-  const directoryPath = "D:\\Doc_registro\\uploads/";
+  const directoryPath = "G:\\Mi unidad\\uploadSingular/";
   const baseUrl = `http://${req.headers.host}/api/files/download/`;
   fs.readdir(directoryPath, function (err, files) {
     if (err) throw err;
@@ -50,7 +50,7 @@ const getFiles = (req, res) => {
 const getOneFile = (req, res) => {
   let fileName = req.params.name;
   const directoryPath =
-    "D:\\Doc_registro\\uploads/"; /*__basedir + "/resources/uploads/"*/
+  "G:\\Mi unidad\\uploadSingular/"; /*__basedir + "/resources/uploads/"*/
   const baseUrl = `http://${req.headers.host}/api/files/download/`;
 
   fs.readdir(directoryPath, function (err, files) {
@@ -79,7 +79,7 @@ const getOneFile = (req, res) => {
 const descargar = (req, res) => {
   let fileName = req.params.name;
   //console.log(fileName)
-  let directoryPath = "D:\\Doc_registro\\uploads/" + fileName;
+  let directoryPath = "G:\\Mi unidad\\uploadSingular/" + fileName;
   res.download(directoryPath, fileName, (err) => {
     if (err)
       return res
@@ -91,7 +91,7 @@ const descargar = (req, res) => {
 const deleteFile = (req, res) => {
   const fileName = req.params.name;
   let directoryPath =
-    "D:\\Doc_registro\\uploads/"; /*__basedir + "/resources/uploads/"*/
+  "G:\\Mi unidad\\uploadSingular/"; /*__basedir + "/resources/uploads/"*/
   fs.unlink(directoryPath + fileName, (err) => {
     if (err) {
       return res.status(500).send({

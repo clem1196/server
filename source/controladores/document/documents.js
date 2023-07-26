@@ -31,7 +31,7 @@ const createDocument = async (req, res) => {
             name,
             file,
             /*created*/ new Date(Date.now()),
-            /*state*/ "Pendiente",
+            /*state*/ "Activo",
           ],
           (error, results) => {
             if (error) throw error;

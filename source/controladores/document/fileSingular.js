@@ -1,9 +1,9 @@
 //const uploadFiles = require("../../middlewares/upload");
-const uploadFile = require("../../middlewares/uploadSingular");
+const uploadFiles = require("../../middlewares/uploadSingular");
 const fs = require("fs");
 const upload = async (req, res) => {
   try {
-    await uploadFile(req, res);
+    await uploadFiles(req, res);
     let Files = req.files;
     //console.log(Files);
     //si Files es undefined significa que en middlewares/upload no lo deja pasar por tener extención diferente

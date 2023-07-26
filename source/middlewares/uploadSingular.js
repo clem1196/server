@@ -30,7 +30,7 @@ let uploadFiles = multer({
   storage: storage,
   limits: { fileSize: Infinity },
   fileFilter: filter,
-}).single("uploaded_files");
+}).array("files", 1);
 
 let uploadFilesMiddleware = util.promisify(uploadFiles);
 module.exports = uploadFilesMiddleware;
